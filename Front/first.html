@@ -1,41 +1,166 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>
-            practice html
-        </title>
-        <style>
-        body { font-family: sans-serif; padding: 20px; }
-        .search-container { display: flex; gap: 10px; margin-bottom: 20px; }
-        input[type="text"] { padding: 8px; width: 250px; border: 1px solid #ccc; }
-        button { padding: 8px 15px; cursor: pointer; background: #007bff; color: white; border: none; }
-        #displayField { padding: 10px; border: 1px dashed #666; background: #f9f9f9; min-height: 20px; }
-        </style>
-    </head>
-    <div class="search-container">
-        <!-- The Search Input -->
-        <input type="text" id="searchInput" placeholder="Type something here...">
-        
-        <!-- The Search Button -->
-        <button onclick="updateDisplay()">Search</button>
-    </div>
+<html lang="eng">
 
-    <!-- The Display Field -->
-    <p><strong>Result:</strong></p>
-    <div id="displayField">Your results will appear here.</div>
+<head>
+    <title>practice html</title>
 
-    <script>
-        // Function to take input value and show it in the display field
-        function updateDisplay() {
-            const inputVal = document.getElementById("searchInput").value;
-            const display = document.getElementById("displayField");
-            
-            if (inputVal.trim() !== "") {
-                display.innerText = "You searched for: " + inputVal;
-            } else {
-                display.innerText = "Please enter text to search.";
-            }
+    <style>
+
+        body {
+            font-family: sans-serif;
+            padding: 20px;
         }
-    </script>
 
+        .search-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            width: 250px;
+            border: 1px solid #ccc;
+            background: white;
+            border-radius: 0px; /* square */
+        }
+
+        button {
+            padding: 8px 15px;
+            color: white;
+            border: none;
+        }
+
+        /* disabled button */
+        button:disabled {
+            background: grey;
+            cursor: not-allowed;
+        }
+
+        /* enabled button */
+        button:not(:disabled) {
+            background: #007bff;
+            cursor: pointer;
+        }
+
+        #displayField {
+            padding: 10px;
+            border: 1px dashed #666;
+            background: #f9f9f9;
+            min-height: 20px;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="search-container">
+
+    <input
+        type="text"
+        id="departinput"
+        list="airportname"
+        placeholder="Departure location"
+        oninput="checkInputs()"
+    >
+
+    <input
+        type="text"
+        id="arriveinput"
+        list="airportname"
+        placeholder="Arrival location"
+        oninput="checkInputs()"
+    >
+
+    <button
+        id="searchButton"
+        onclick="updateDisplay()"
+        disabled
+    >
+        Search
+    </button>
+
+</div>
+
+<datalist id="airportname">
+    <option value="Sydney">
+    <option value="Melbourne">
+    <option value="Brisbane">
+    <option value="Perth">
+    <option value="Adelaide">
+</datalist>
+
+<p><strong>Result:</strong></p>
+
+<div id="displayField">
+    Your results will appear here.
+</div>
+
+<script>
+
+    const validAirports = [
+        "Sydney",
+        "Melbourne",
+        "Brisbane",
+        "Perth",
+        "Adelaide"
+    ];
+
+    function checkInputs(){
+
+        const depart_input =
+            document.getElementById("departinput").value.trim();
+
+        const arrive_input =
+            document.getElementById("arriveinput").value.trim();
+
+        const searchButton =
+            document.getElementById("searchButton");
+
+        if(
+            validAirports.includes(depart_input) &&
+            validAirports.includes(arrive_input)
+        ){
+            searchButton.disabled = false;
+        }
+        else{
+            searchButton.disabled = true;
+        }
+    }
+
+    function updateDisplay(){
+
+        const depart_input =
+            document.getElementById("departinput").value;
+
+        const arrive_input =
+            document.getElementById("arriveinput").value;
+
+        const displays =
+            depart_input + " to " + arrive_input;
+
+        const display =
+            document.getElementById("displayField");
+
+        if(
+            !validAirports.includes(depart_input) ||
+            !validAirports.includes(arrive_input)
+        ){
+            display.innerText =
+                "The locations entered are not valid.";
+        }
+        else if(displays.trim() !== ""){
+            display.innerText =
+                "You searched for: " + displays;
+        }
+        else{
+            display.innerText =
+                "Please enter text to search.";
+        }
+    }
+
+</script>
+
+</body>
 </html>
